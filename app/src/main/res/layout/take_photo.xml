@@ -5,22 +5,26 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="16dp">
+    android:paddingTop="100dp"
+    android:layout_centerVertical="true" >
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/caption"
         android:hint="Image Caption"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:paddingBottom="30dp"/>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="200dp">
+    android:layout_height="200dp"
+    android:paddingTop="30dp">
     <Button
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:id="@+id/clickPic"
         android:text="Take Photo"
+        android:layout_marginStart="30dp"
         />
 
     <Button
@@ -28,6 +32,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/savePic"
         android:text="Save"
+        android:layout_gravity="right"
+        android:layout_marginLeft="30dp"
         />
 </LinearLayout>
 

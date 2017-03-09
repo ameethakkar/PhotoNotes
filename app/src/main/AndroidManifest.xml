@@ -36,7 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TakePhoto" />
+        <activity
+            android:name=".TakePhoto"
+            android:label="@string/title_activity_take_photo"/>
         <activity
             android:name=".ViewPhoto"
             android:configChanges="orientation|keyboardHidden|screenSize"

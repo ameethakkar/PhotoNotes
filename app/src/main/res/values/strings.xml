@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PhotoNotes</string>
     <string name="action_uninstall">Uninstall</string>
-
+    <string name="title_activity_take_photo">TakePhoto</string>
     <string name="title_activity_view_photo">ViewPhoto</string>
     <string name="default_text">Image Caption</string>
     <string name="image_content">Image\n Content</string>
