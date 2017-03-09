@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class ImageData {
 
     public static final String DEBUG_TAG = "PhotoData";
-    public static final String COLUMN_CAPTION = "CAPTION";
+    //public static final String COLUMN_CAPTION = "CAPTION";
     private static final String[] ALL_COLUMNS = {
             PhotoDBHelper.COLUMN_ID,
             PhotoDBHelper.COLUMN_CAPTION,
@@ -83,6 +83,7 @@ public class ImageData {
     public String getPhotoURI(String caption) {
         String notesUri = null;
         String whereClause = PhotoDBHelper.COLUMN_CAPTION + "=?";
+        Log.d("getPhotoURI: ","caption value passed: " + caption );
         String[] whereArgs = {caption};
         open();
         Cursor cursor = null;
@@ -113,9 +114,9 @@ public class ImageData {
 
         if(cursor != null){
             cursor.moveToFirst();
-            return  cursor;
+
         }
-        return null;
+        return  cursor;
     }
 }
 

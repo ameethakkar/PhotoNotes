@@ -10,12 +10,12 @@ import android.util.Log;
  */
 
     public class PhotoDBHelper extends SQLiteOpenHelper {
-        public static final String DB_NAME = "photoinfo.db";
+        public static final String DB_NAME = "imageDetailsDB.db";
         public static final int DB_VERSION = 1;
         public static final String DEBUG_TAG = "PhotoDBHelper";
 
         public static final String TABLE_PHOTOINFO = "PHOTOINFO";
-        public static final String COLUMN_ID = "_ID";
+        public static final String COLUMN_ID = "_id";
         public static final String COLUMN_CAPTION = "CAPTION";
         public static final String COLUMN_PATH = "PATH";
 
@@ -23,6 +23,7 @@ import android.util.Log;
                 "CREATE TABLE " + TABLE_PHOTOINFO + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         COLUMN_CAPTION + " TEXT, " +
                         COLUMN_PATH + " TEXT " + ")";
+
 
         public PhotoDBHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);

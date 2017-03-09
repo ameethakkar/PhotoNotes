@@ -4,10 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,17 +15,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
-
-import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
 
     private ImageData imgData;
-    ArrayList<String> notes = new ArrayList<String>();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
+    ListView myListView;
+    public String path;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +40,7 @@ public class ListActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA_PERMISSION);
         }
-//        notes.addAll(imgData.getPhotoCaption());
+        myListView = (ListView) findViewById(R.id.listView);
         populateListView();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -53,21 +52,50 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent viewPhoto = new Intent(getApplicationContext(), ViewPhoto.class);
+                Cursor c = (Cursor)parent.getAdapter().getItem(1);
+
+                String listItem = c.getString(position);
+                Log.d("ListActivity", "Selected Item position " +
+                        position + " Selected Item: " + listItem);
+                viewPhoto.putExtra("caption", listItem.toString());
+                path = imgData.getPhotoURI(listItem);
+                viewPhoto.putExtra("path", path);
+                Log.d("ListActivity: ", "Selected URI " + path);
+                startActivity(viewPhoto);
+            }
+        });
+       /* myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent viewPhoto = new Intent(getApplicationContext(), ViewPhoto.class);
+                String listItem =  myListView.getItemAtPosition(position).toString();
+                //Object listItem = getString(view.get);
+                Log.d("ListActivity", "Selected Item position " +
+                        position + " Selected Item: " + listItem);
+                path = imgData.getPhotoURI(listItem);
+                viewPhoto.putExtra("imagePath", path);
+                Log.d("ListActivity: ", "Selected URI " + path);
+                viewPhoto.putExtra("caption", listItem.toString());
+                startActivity(viewPhoto);
+            }
+        });*/
 
     }
 
     private void populateListView() {
         try {
+            imgData = new ImageData(getApplicationContext());
             if(imgData != null) {
                 imgData.open();
                 Cursor cursor = imgData.getAllRows();
-
-                String[] fromFieldNames = new String[]{imgData.COLUMN_CAPTION};
+                String[] fromFieldNames = new String[]{PhotoDBHelper.COLUMN_CAPTION};
                 SimpleCursorAdapter myCursorAdaptor;
                 int[] toViewIDs = new int[]{android.R.id.text1};
-                myCursorAdaptor = new SimpleCursorAdapter(getBaseContext(), R.layout.activity_list, cursor, fromFieldNames, toViewIDs, 0);
-                ListView myListView = (ListView) findViewById(R.id.listView);
-
+                myCursorAdaptor = new SimpleCursorAdapter(getBaseContext(), R.layout.content_list, cursor, fromFieldNames, toViewIDs, 0);
                 myListView.setAdapter(myCursorAdaptor);
             }
         } catch (Exception e) {
@@ -79,11 +107,12 @@ public class ListActivity extends AppCompatActivity {
             }
         }
     }
-//        imgData = new ImageData(getApplicationContext());
-//        notes.addAll(imgData.getPhotoCaption());
-//        SimpleAdapter simpleAdpt = new SimpleAdapter(this, notes, android.R.layout.simple_list_item_1,
-//                new String[] {"planet"}, new int[] {android.R.id.text1});
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateListView();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,7 +129,10 @@ public class ListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_uninstall) {
+            Uri packageURI = Uri.parse("package:assignment2.edu.csulb.photonotes");
+            Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+            startActivity(uninstallIntent);
             return true;
         }
 
