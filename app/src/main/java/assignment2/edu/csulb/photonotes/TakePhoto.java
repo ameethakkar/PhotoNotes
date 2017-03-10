@@ -53,6 +53,12 @@ public class TakePhoto extends Activity {
             @Override
             public void onClick(View v) {
                 imgData = new ImageData(getApplicationContext());
+
+//                String strCaptionName = photoCaption.getText().toString();
+//                if(strCaptionName.trim().equals("")) {
+//                    photoCaption.setText("Note");
+//                    return;
+//                }
                 imgData.insert(photoCaption.getText().toString(),imagePath);
                 finish();
             }

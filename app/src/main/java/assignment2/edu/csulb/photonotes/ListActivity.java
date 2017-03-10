@@ -56,9 +56,11 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent viewPhoto = new Intent(getApplicationContext(), ViewPhoto.class);
-                Cursor c = (Cursor)parent.getAdapter().getItem(1);
-
-                String listItem = c.getString(position);
+                Cursor c = ((SimpleCursorAdapter)parent.getAdapter()).getCursor();
+                //Move the cursor to the specified row of the item selected.
+                c.moveToPosition(position);
+                //c.getString(1) is to move to the column.
+                String listItem = c.getString(1);
                 Log.d("ListActivity", "Selected Item position " +
                         position + " Selected Item: " + listItem);
                 viewPhoto.putExtra("caption", listItem.toString());
@@ -68,21 +70,6 @@ public class ListActivity extends AppCompatActivity {
                 startActivity(viewPhoto);
             }
         });
-       /* myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent viewPhoto = new Intent(getApplicationContext(), ViewPhoto.class);
-                String listItem =  myListView.getItemAtPosition(position).toString();
-                //Object listItem = getString(view.get);
-                Log.d("ListActivity", "Selected Item position " +
-                        position + " Selected Item: " + listItem);
-                path = imgData.getPhotoURI(listItem);
-                viewPhoto.putExtra("imagePath", path);
-                Log.d("ListActivity: ", "Selected URI " + path);
-                viewPhoto.putExtra("caption", listItem.toString());
-                startActivity(viewPhoto);
-            }
-        });*/
 
     }
 
